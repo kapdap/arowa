@@ -1,0 +1,95 @@
+/* ===========================
+   SESSIONS POPUP COMPONENT
+   ========================== */
+
+/* === Main Popup Container === */
+.sessions-popup {
+  bottom: 80px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 350px;
+  max-height: 500px;
+}
+
+/* === Sessions List Area === */
+.sessions-list {
+  flex: 1;
+  max-height: 350px;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+/* === Popup Footer === */
+.sessions-popup-footer {
+  flex-shrink: 0;
+  padding: 15px;
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-bg-light);
+}
+
+/* === Session Items === */
+.session-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding: 12px;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-bg-light);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.session-item:hover {
+  border-color: var(--color-primary);
+  background-color: var(--color-bg-muted);
+}
+
+.session-item:last-child {
+  margin-bottom: 0;
+}
+
+/* === Session Item Content === */
+.session-item-info {
+  flex: 1;
+  min-width: 0;
+  margin-right: 10px;
+}
+
+.session-item-name {
+  margin-bottom: 4px;
+  color: var(--color-text-dark);
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.session-item-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+/* === Session Item Actions === */
+.session-item-actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 8px;
+}
+
+.session-delete-btn {
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-normal);
+}
+
+/* === Footer Actions === */
+.clear-all-btn {
+  border-radius: var(--radius-lg);
+  transition: background var(--transition-normal);
+}

@@ -1,0 +1,72 @@
+/* ========================================
+ * SHARE COMPONENTS
+ * ======================================== */
+
+/* Share button */
+.share-btn {
+  border: none;
+  background: transparent;
+  color: var(--color-neutral);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.share-btn:hover {
+  transform: scale(1.1);
+}
+
+/* ========================================
+ * SHARE MODAL CONTENT
+ * ======================================== */
+
+/* Share info text */
+.share-info {
+  color: var(--color-text-light);
+  font-size: var(--font-size-sm);
+}
+
+/* QR code container */
+.share-qr-code {
+  text-align: center;
+}
+
+.share-qr-code canvas {
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+}
+
+/* ========================================
+ * SHARE URL CONTROLS
+ * ======================================== */
+
+/* URL input container */
+.share-url-container {
+  display: flex;
+  gap: var(--space-sm);
+  margin: var(--space-md) 0;
+}
+
+/* URL input field */
+.share-url {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-xl);
+  background: var(--color-bg-light);
+  font-size: var(--font-size-md);
+}
+
+/* Copy button */
+.copy-btn {
+  padding: 0.75rem var(--space-md);
+  border: none;
+  border-radius: var(--radius-xl);
+  background: var(--color-primary);
+  color: white;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.copy-btn:hover {
+  background: var(--color-primary-hover);
+}

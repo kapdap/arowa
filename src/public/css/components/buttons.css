@@ -1,0 +1,91 @@
+/* ========================================
+ * BUTTON COMPONENTS
+ * ======================================== */
+
+/* ========================================
+ * CORNER BUTTONS
+ * ======================================== */
+
+/* Base corner button styles */
+.corner-btn {
+  position: fixed;
+  z-index: 999;
+  border: none;
+  background: transparent;
+  color: var(--color-neutral);
+  font-size: 1.8rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.corner-btn:hover {
+  color: var(--color-text);
+  transform: scale(1.1);
+}
+
+.corner-btn:active {
+  transform: scale(0.9);
+}
+
+/* Corner button positions */
+.corner-btn-topleft {
+  top: var(--space-md);
+  left: var(--space-md);
+}
+
+.corner-btn-topright {
+  top: var(--space-md);
+  right: var(--space-md);
+}
+
+.corner-btn-bottomleft {
+  bottom: var(--space-md);
+  left: var(--space-md);
+}
+
+/* ========================================
+ * BUTTON UTILITY CLASSES
+ * ======================================== */
+
+/* Size modifiers */
+.btn-small {
+  padding: 6px 8px;
+  font-size: 12px;
+}
+
+.btn-medium {
+  padding: 10px;
+  font-size: 14px;
+}
+
+/* Color variants */
+.btn-danger {
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--color-danger);
+  color: white;
+  cursor: pointer;
+  transition: background var(--transition-normal);
+}
+
+.btn-danger:hover {
+  background: var(--color-danger-hover);
+}
+
+.btn-neutral {
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--color-neutral);
+  color: white;
+  cursor: pointer;
+  transition: background var(--transition-normal);
+}
+
+.btn-neutral:hover {
+  background: var(--color-neutral-hover);
+}
+
+/* Layout modifiers */
+.btn-full-width {
+  width: 100%;
+}

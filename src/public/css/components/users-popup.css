@@ -1,0 +1,95 @@
+/* ========================================
+ * USERS POPUP COMPONENT
+ * ======================================== */
+
+/* Users popup container */
+.users-popup {
+  bottom: 80px;
+  right: 20px;
+  width: 300px;
+  max-height: 400px;
+}
+
+/* Users list */
+.users-list {
+  max-height: 300px;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+/* ========================================
+ * USER ITEM COMPONENTS
+ * ======================================== */
+
+/* User item container */
+.user-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  padding: 10px;
+  border-radius: var(--radius-lg);
+  transition: background-color var(--transition-normal);
+}
+
+.user-item:hover {
+  background-color: var(--color-bg-light);
+}
+
+.user-item:last-child {
+  margin-bottom: 0;
+}
+
+/* ========================================
+ * USER AVATAR AND INFO
+ * ======================================== */
+
+/* User avatar */
+.user-item-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  margin-right: 12px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.user-item-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* User info */
+.user-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.user-item-name {
+  margin-bottom: 2px;
+  color: var(--color-text-dark);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ========================================
+ * USER STATUS INDICATORS
+ * ======================================== */
+
+/* Online/offline status for user avatars */
+.user-status-online {
+  border: 3px solid var(--color-success) !important;
+}
+
+.user-status-offline {
+  border: 3px solid var(--color-danger) !important;
+}

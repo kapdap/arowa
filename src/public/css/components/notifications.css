@@ -1,0 +1,54 @@
+/* ===========================
+   NOTIFICATIONS COMPONENT
+   ========================== */
+
+/* === Base Notification Styles === */
+.notification {
+  position: fixed;
+  top: var(--space-md);
+  left: 50%;
+  z-index: var(--z-notification);
+  max-width: 300px;
+  padding: 12px 20px;
+  border-radius: var(--radius-xl);
+  background: #4a5568;
+  color: white;
+  font-size: var(--font-size-md);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transform: translate(-50%, -100%);
+  animation: slideDownUp 5s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+/* === Notification Types === */
+.notification.success {
+  background: #48bb78;
+}
+
+.notification.error {
+  background: #f56565;
+}
+
+/* === Animations === */
+/* Keyframes to slide down and then back up */
+@keyframes slideDownUp {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-100%);
+  }
+  15% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0%);
+  }
+  80% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0%);
+  }
+  95% {
+    opacity: 0.5;
+    transform: translateX(-50%) translateY(-50%);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-100%);
+  }
+}

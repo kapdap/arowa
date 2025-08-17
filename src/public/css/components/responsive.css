@@ -1,0 +1,151 @@
+/* ===========================
+   RESPONSIVE DESIGN COMPONENT
+   ========================== */
+
+/* === Mobile Screen Adjustments (max-width: 480px) === */
+@media (max-width: 480px) {
+  /* Layout container */
+  .container {
+    padding: var(--space-md);
+  }
+
+  /* Timer display */
+  .timer-display {
+    min-width: 250px;
+    padding: var(--space-xl);
+    font-size: var(--font-size-xxl);
+  }
+
+  /* Controls */
+  .controls {
+    gap: var(--space-sm);
+  }
+
+  .control-btn {
+    width: 50px;
+    height: 50px;
+    font-size: var(--font-size-xl);
+  }
+
+  /* Corner buttons */
+  .corner-btn {
+    padding: var(--space-xs);
+    font-size: 1.6rem;
+  }
+
+  .corner-btn-topright {
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+
+  .corner-btn-bottomleft {
+    bottom: 0.75rem;
+    left: 0.75rem;
+  }
+
+  /* Intervals */
+  .interval-name {
+    flex: 2;
+    min-width: 0;
+  }
+  .interval-duration {
+    width: 70px;
+    font-size: var(--font-size-sm);
+  }
+
+  /* Confirm dialog */
+  .confirm-dialog {
+    padding: var(--space-lg);
+  }
+
+  .confirm-actions {
+    flex-direction: column;
+  }
+
+  .confirm-btn {
+    width: 100%;
+  }
+
+  /* Popups */
+  .sessions-popup {
+    width: calc(100vw - 40px);
+    left: 20px;
+    right: 20px;
+  }
+
+  .users-popup {
+    width: calc(100vw - 40px);
+    left: 20px;
+    right: 20px;
+  }
+
+  /* Status bar */
+  .status-bar {
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  /* User profile */
+  .user-profile-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .user-avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+}
+
+/* === Short Screen Height Adjustments (max-height: 400px) === */
+@media (max-height: 400px) {
+  /* Timer adjustments */
+  .timer-container {
+    margin-bottom: var(--space-md);
+  }
+
+  .timer-display {
+    min-width: 300px;
+    min-height: 150px;
+    padding: 0;
+    font-size: var(--font-size-xxl);
+  }
+
+  /* Controls */
+  .control-btn {
+    width: 55px;
+    height: 55px;
+  }
+
+  /* Intervals */
+  .interval-info {
+    font-size: 1.4rem;
+  }
+
+  /* Popup headers */
+  .users-popup-header,
+  .sessions-popup-header {
+    padding: 8px 15px;
+  }
+
+  .users-popup-header h4,
+  .sessions-popup-header h4 {
+    font-size: 15px;
+  }
+
+  /* Sessions list */
+  .sessions-list {
+    max-height: 100px;
+    padding: 3px 10px;
+  }
+
+  /* User items */
+  .user-item {
+    padding: 0;
+  }
+
+  .user-avatar-container {
+    display: none;
+  }
+}

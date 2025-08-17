@@ -1,0 +1,11 @@
+*
+!src/
+!scripts/
+!package.json
+!LICENSE
+!README.md
+!tsconfig.json
+!tsconfig.server.json
+!eslint.config.ts
+!.env.example
+.env

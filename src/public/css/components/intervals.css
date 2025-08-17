@@ -1,0 +1,202 @@
+/* ========================================
+ * SEGMENTS COMPONENTS
+ * ======================================== */
+
+/* Interval item container */
+.interval-item {
+  margin-bottom: var(--space-md);
+  padding: var(--space-md);
+  border: 1px solid var(--color-border-light);
+  border-radius: 10px;
+  background: var(--color-bg-light);
+}
+
+.interval-item:last-of-type {
+  margin-bottom: 0;
+}
+
+/* ========================================
+ * SEGMENT HEADER
+ * ======================================== */
+
+/* Interval header container */
+.interval-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+/* Collapse toggle button */
+.interval-collapse {
+  flex-shrink: 0;
+  padding: var(--space-xs);
+  border: none;
+  background: none;
+  color: var(--color-text-light);
+  font-size: var(--font-size-xs);
+  cursor: pointer;
+  transform: rotate(90deg);
+  transition: transform var(--transition-fast);
+}
+
+.interval-collapse:hover {
+  color: var(--color-text);
+}
+
+/* ========================================
+ * SEGMENT FORM CONTROLS
+ * ======================================== */
+
+/* Interval name input */
+.interval-name {
+  flex: 1;
+  padding: var(--space-sm);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-lg);
+}
+
+/* Interval duration input */
+.interval-duration {
+  width: 60px;
+  padding: var(--space-sm);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-md);
+}
+
+/* Interval delete button */
+.interval-delete {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  margin-left: auto;
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast);
+}
+
+/* ========================================
+ * SEGMENT COLLAPSE STATES
+ * ======================================== */
+
+/* Interval details container */
+.interval-details {
+  max-height: 1000px;
+  overflow: hidden;
+  opacity: 1;
+  transition: all var(--transition-normal);
+}
+
+/* Collapsed state */
+.interval-item.collapsed .interval-collapse {
+  transform: rotate(0deg);
+}
+
+.interval-item.collapsed .interval-details {
+  max-height: 0;
+  margin-top: 0;
+  padding-top: 0;
+  opacity: 0;
+}
+
+.interval-item.collapsed .interval-header {
+  margin-bottom: 0;
+}
+
+/* ========================================
+ * SEGMENT AUDIO CONTROLS
+ * ======================================== */
+
+/* Audio section */
+.interval-audio {
+  margin-bottom: 1rem;
+}
+
+.interval-audio label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+/* Audio controls container */
+.interval-audio-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Audio cue selector */
+.interval-audio-cue {
+  flex: 1;
+  min-width: 150px;
+  padding: 0.5rem;
+  border: 1px solid #e9ecef;
+  border-radius: 5px;
+  background: white;
+  font-size: 0.9rem;
+}
+
+.interval-audio-cue:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+  outline: none;
+}
+
+/* Test audio button */
+.test-audio-btn {
+  border: none;
+  background: transparent;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.test-audio-btn:hover {
+  transform: scale(1.05);
+}
+
+.test-audio-btn:active {
+  transform: scale(0.95);
+}
+
+/* ========================================
+ * SEGMENT CSS STYLES
+ * ======================================== */
+
+/* CSS section labels */
+.interval-styles label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+/* CSS textarea */
+.interval-css {
+  width: 100%;
+  min-height: 120px;
+  padding: 0.75rem;
+  border: 1px solid #e9ecef;
+  border-radius: 5px;
+  background: #ffffff;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.85rem;
+  resize: vertical;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.interval-css:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+  outline: none;
+}
+
+/* CSS help text */
+.css-help {
+  display: block;
+  margin-top: 0.5rem;
+  color: #7f8c8d;
+  font-size: 0.8rem;
+  font-style: italic;
+}

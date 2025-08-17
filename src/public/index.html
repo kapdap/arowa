@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>AroWā</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body class="timer-stopped">
+    <div class="container">
+      <!-- Session Info -->
+      <div class="session-details">
+        <div id="session-name">Focus</div>
+        <div id="session-description">Focus and break timer</div>
+      </div>
+
+      <div class="flex-space-between"></div>
+
+      <!-- Main Timer Display -->
+      <div class="timer-container">
+        <div id="timer-display" class="timer-display">
+          <button id="audio-btn" class="timer-btn audio-btn" title="Click to enable audio alerts">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 8V16H8L13.33 21.33V2.67L8 8H4Z" fill="currentColor" />
+              <path d="M16 8.67 C17.33 10.67 17.33 13.33 16 15.33" id="volume-bar-1" fill="none" />
+              <path d="M18 6.67 C20.67 9.33 20.67 14.67 18 17.33" id="volume-bar-2" fill="none" />
+              <path d="M20 4.67 C23.33 8 23.33 16 20 19.33" id="volume-bar-3" class="volume-bar-3" fill="none" />
+              <line x1="1" y1="1" x2="23" y2="23" id="audio-disabled-line" />
+            </svg>
+          </button>
+          <button id="interval-status" class="timer-btn interval-status-btn" title="Open Intervals">1/2</button>
+          <button id="repeat-btn" class="timer-btn repeat-btn" title="Click to toggle repeat mode">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 4v6h6" />
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+              <line x1="1" y1="1" x2="23" y2="23" id="repeat-disabled-line" class="repeat-disabled-line" />
+            </svg>
+          </button>
+          <button id="wake-lock-btn" class="timer-btn wake-lock-btn" title="Click to keep screen awake">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="6" y="3" width="12" height="18" rx="2" ry="2" />
+              <rect x="8" y="6" width="8" height="10" rx="1" ry="1" fill="currentColor" opacity="0.3" />
+              <path d="M10 11v2" stroke-width="1.5" />
+              <path d="M14 11v2" stroke-width="1.5" />
+              <rect x="9.5" y="10.5" width="5" height="3" rx="0.5" stroke-width="1" />
+              <path d="M11 10.5V9a1 1 0 0 1 2 0v1.5" stroke-width="1" fill="none" />
+              <line x1="1" y1="1" x2="23" y2="23" id="wake-lock-disabled-line" class="wake-lock-disabled-line" />
+            </svg>
+          </button>
+          <button id="focus-mode-btn" class="timer-btn focus-mode-btn" title="Click to toggle focus mode">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+              <circle cx="12" cy="12" r="3" fill="currentColor" />
+              <line x1="1" y1="1" x2="23" y2="23" id="focus-mode-disabled-line" class="focus-mode-disabled-line" />
+            </svg>
+          </button>
+          <span id="timer-text">25:00</span>
+        </div>
+        <div class="interval-info">
+          <div id="interval-name">Focus</div>
+        </div>
+      </div>
+
+      <!-- Timer Controls -->
+      <div class="controls">
+        <button id="start-btn" class="control-btn start">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </button>
+        <button id="pause-btn" class="control-btn pause" style="display: none">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+          </svg>
+        </button>
+        <button id="stop-btn" class="control-btn reset">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6 6h12v12H6z" />
+          </svg>
+        </button>
+        <button id="next-btn" class="control-btn next">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="flex-space-between"></div>
+
+      <!-- Share Button -->
+      <button id="share-btn" class="corner-btn corner-btn-topleft" title="Copy session link to clipboard">
+        <svg width="25" height="25" viewBox="0 0 512 512" fill="none" stroke="currentColor" stroke-width="32">
+          <circle cx="128" cy="256" r="48" />
+          <circle cx="384" cy="112" r="48" />
+          <circle cx="384" cy="400" r="48" />
+          <path d="M172.12 204.12l167.76-95.76M172.12 307.88l167.76 95.76" />
+        </svg>
+      </button>
+
+      <!-- Settings Button -->
+      <button id="settings-btn" class="corner-btn corner-btn-topright" title="Open settings">
+        <svg width="25" height="25" viewBox="0 0 512 512" fill="none" stroke="currentColor" stroke-width="32">
+          <path
+            d="M262.29 192.31a64 64 0 1057.4 57.4 64.13 64.13 0 00-57.4-57.4zM416.39 256a154.34 154.34 0 01-1.53 20.79l45.21 35.46a10.81 10.81 0 012.45 13.75l-42.77 74a10.81 10.81 0 01-13.14 4.59l-44.9-18.08a16.11 16.11 0 00-15.17 1.75A164.48 164.48 0 01325 403.81a15.94 15.94 0 00-8.82 12.14l-6.73 47.89a11.08 11.08 0 01-10.68 9.16h-85.54a11.11 11.11 0 01-10.69-8.87l-6.72-47.82a16.07 16.07 0 00-9-12.22 155.3 155.3 0 01-21.46-15.5 16.12 16.12 0 00-15.11-1.71l-44.89 18.07a10.81 10.81 0 01-13.14-4.58l-42.77-74a10.8 10.8 0 012.45-13.75l45.21-35.46a155.49 155.49 0 010-41.58l-45.21-35.46a10.81 10.81 0 01-2.45-13.75l42.77-74a10.81 10.81 0 0113.14-4.59l44.9 18.08a16.11 16.11 0 0015.17-1.75A164.48 164.48 0 01187 108.19a15.94 15.94 0 008.82-12.14l6.73-47.89A11.08 11.08 0 01213.23 39h85.54a11.11 11.11 0 0110.69 8.87l6.72 47.82a16.07 16.07 0 009 12.22 155.3 155.3 0 0121.46 15.5 16.12 16.12 0 0015.11 1.71l44.89-18.07a10.81 10.81 0 0113.14 4.58l42.77 74a10.8 10.8 0 01-2.45 13.75l-45.21 35.46a154.27 154.27 0 011.53 20.79z" />
+        </svg>
+      </button>
+
+      <!-- Sessions Button -->
+      <button id="sessions-btn" class="corner-btn corner-btn-bottomleft" title="Open sessions">
+        <svg width="25" height="25" viewBox="0 0 512 512" fill="none" stroke="currentColor" stroke-width="32">
+          <path stroke-linecap="round" stroke-miterlimit="10" d="M80 160h352M80 256h352M80 352h352" />
+        </svg>
+      </button>
+
+      <!-- Connection Status -->
+      <div class="status-bar">
+        <span id="connection-status" class="connection-status" style="display: none">Connecting...</span>
+        <span id="connected-users" class="connected-users-count">0 Users connected</span>
+        <button id="user-profile-btn" class="user-profile-btn" title="User profile">
+          <img id="user-avatar" class="user-avatar" src="https://www.gravatar.com/avatar/?s=30&d=identicon&r=pg" />
+        </button>
+      </div>
+    </div>
+
+    <!-- Share Section -->
+    <div id="share-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="modal-body">
+          <p class="share-info">Anyone with this link can join your timer session</p>
+          <div class="share-url-container">
+            <input type="text" id="share-url" class="share-url" readonly />
+            <button id="share-copy-btn" class="copy-btn" title="Copy to clipboard">Copy</button>
+          </div>
+          <div id="share-qr-code" class="share-qr-code"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="session-name-input">Session Name</label>
+            <input type="text" id="session-name-input" class="form-control" placeholder="Focus and Break Session" />
+          </div>
+
+          <div class="form-group">
+            <label for="session-desc-input">Description</label>
+            <input type="text" id="session-desc-input" class="form-control" placeholder="Focus and break timer" />
+          </div>
+
+          <div class="toggle-group">
+            <label class="toggle-label">
+              <span class="toggle-text">Repeat Mode</span>
+              <div class="toggle-switch">
+                <input type="checkbox" id="repeat-toggle" class="toggle-input" />
+                <span class="toggle-slider"></span>
+              </div>
+            </label>
+          </div>
+
+          <div class="settings-section">
+            <div class="toggle-group">
+              <label class="toggle-label">
+                <span class="toggle-text">Audio Alerts</span>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="audio-toggle" class="toggle-input" />
+                  <span class="toggle-slider"></span>
+                </div>
+              </label>
+            </div>
+
+            <div class="toggle-group">
+              <label class="toggle-label">
+                <span class="toggle-text">Keep Screen Awake</span>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="wake-lock-toggle" class="toggle-input" />
+                  <span class="toggle-slider"></span>
+                </div>
+              </label>
+            </div>
+
+            <div class="toggle-group">
+              <label class="toggle-label">
+                <span class="toggle-text">Focus Mode</span>
+                <div class="toggle-switch">
+                  <input type="checkbox" id="focus-mode-toggle" class="toggle-input" />
+                  <span class="toggle-slider"></span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <input type="file" id="import-file-input" class="import-file-input" accept=".json" style="display: none" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Intervals Modal-->
+    <div id="intervals-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="modal-body">
+          <div class="intervals-container">
+            <div class="intervals-header">
+              <h3>Intervals</h3>
+              <div class="intervals-actions">
+                <button id="add-interval-btn" class="setting-btn add-btn" title="Add a new interval">+ Add</button>
+                <button id="import-btn" class="setting-btn import-btn" title="Import intervals from JSON file">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7,10 12,15 17,10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                  </svg>
+                </button>
+                <button id="export-btn" class="setting-btn export-btn" title="Export intervals to JSON file">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="17,8 12,3 7,8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div id="intervals-list"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Profile Modal -->
+    <div id="user-modal" class="modal user-modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="modal-body">
+          <div class="user-avatar-container">
+            <img
+              id="user-avatar-large"
+              class="user-avatar-large"
+              src="https://www.gravatar.com/avatar/?s=160&d=identicon&r=pg"
+              alt="User avatar" />
+          </div>
+          <form id="profile-form">
+            <div class="form-group">
+              <label for="user-name-input">Name</label>
+              <input
+                type="text"
+                id="user-name-input"
+                placeholder="Enter your name"
+                title="Enter your name to identify yourself to other users in the session" />
+              <small>Share your name with other users in the session</small>
+            </div>
+            <div class="form-group">
+              <label for="user-email-input">Email</label>
+              <input
+                type="email"
+                id="user-email-input"
+                placeholder="Enter your Gravatar email"
+                title="Email is only used retreive your Gravatar profile image and is not shared to the server or with other users" />
+              <small>Share your Gravatar profile image with other users in the session</small>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Connected Users Popup -->
+    <div id="users-popup" class="popup users-popup hidden">
+      <div class="popup-header users-popup-header">
+        <h4>Connected Users</h4>
+        <button id="close-users-popup" class="close-popup-btn">&times;</button>
+      </div>
+      <div id="users-list" class="users-list">
+        <!-- Users will be populated here -->
+      </div>
+    </div>
+
+    <!-- Sessions Popup -->
+    <div id="sessions-popup" class="popup sessions-popup hidden">
+      <div class="popup-header sessions-popup-header">
+        <h4>Sessions</h4>
+        <button id="close-sessions-popup" class="close-popup-btn">&times;</button>
+      </div>
+      <div id="sessions-list" class="sessions-list">
+        <!-- Sessions will be populated here -->
+      </div>
+      <div class="sessions-popup-footer">
+        <button id="clear-all-sessions-btn" class="btn-danger btn-medium btn-full-width clear-all-btn">
+          Clear All Sessions
+        </button>
+      </div>
+    </div>
+
+    <!-- Confirm Dialog Modal -->
+    <div id="confirm-modal" class="modal">
+      <div class="modal-content confirm-dialog">
+        <div class="confirm-message" id="confirm-message">Are you sure you want to proceed?</div>
+        <div class="confirm-actions">
+          <button id="confirm-cancel-btn" class="btn-neutral confirm-btn cancel-btn">Cancel</button>
+          <button id="confirm-ok-btn" class="btn-danger confirm-btn ok-btn">OK</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- JavaScript modules -->
+    <script src="js/libs/jshashes/v1.0.8/hashes.min.js"></script>
+    <script src="js/libs/nosleep/v0.12.0/dist/NoSleep.min.js"></script>
+    <script src="js/libs/qr-creator/v0.14.0/dist/qr-creator.min.js"></script>
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>

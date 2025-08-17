@@ -1,0 +1,66 @@
+/* ========================================
+ * TIMER CONTROLS
+ * ======================================== */
+
+/* Controls container */
+.controls {
+  display: flex;
+  gap: var(--space-md);
+}
+
+/* ========================================
+ * CONTROL BUTTONS
+ * ======================================== */
+
+/* Base control button styles */
+.control-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border: 2px solid var(--color-border-light);
+  border-radius: 50px;
+  background: var(--color-bg-white);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.control-btn:hover {
+  border-color: #dee2e6;
+  background: var(--color-bg-light);
+  transform: scale(1.05);
+}
+
+.control-btn:active {
+  transform: scale(0.95);
+}
+
+/* ========================================
+ * CONTROL BUTTON STATES
+ * ======================================== */
+
+.control-btn.start {
+  border-color: var(--color-success);
+  background: var(--color-success);
+  color: white;
+}
+
+.control-btn.pause {
+  border-color: var(--color-warning);
+  background: var(--color-warning);
+  color: white;
+}
+
+.control-btn.reset {
+  border-color: var(--color-danger);
+  background: var(--color-danger);
+  color: white;
+}
+
+.control-btn.next {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: white;
+}

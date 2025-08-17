@@ -1,0 +1,119 @@
+/* ========================================
+ * TIMER COMPONENTS
+ * ======================================== */
+
+/* Main timer container */
+.timer-container {
+  margin-bottom: var(--space-xxl);
+  text-align: center;
+}
+
+/* Timer display */
+.timer-display {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 300px;
+  min-height: 200px;
+  margin-bottom: var(--space-md);
+  padding: var(--space-xxl) 4rem;
+  border-radius: 20px;
+  background: var(--color-bg-white);
+  color: var(--color-text);
+  font-size: var(--font-size-xxl);
+  font-weight: 200;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  box-shadow: var(--shadow-lg);
+}
+
+/* Interval info */
+.interval-info {
+  margin-top: var(--space-md);
+  color: var(--color-text-light);
+  font-size: 1.5rem;
+  font-weight: 300;
+}
+
+/* ========================================
+ * TIMER BUTTONS
+ * ======================================== */
+
+/* Base timer button styles */
+.timer-btn {
+  position: absolute;
+  border: none;
+  background: none;
+  color: var(--color-border);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.timer-btn:hover {
+  transform: scale(1.1);
+}
+
+.timer-btn:active {
+  transform: scale(0.95);
+}
+
+/* Timer button positions */
+.audio-btn {
+  top: 0.9rem;
+  left: 1rem;
+}
+
+.repeat-btn {
+  top: 0.9rem;
+  right: 1rem;
+}
+
+.focus-mode-btn {
+  bottom: 0.9rem;
+  right: 1rem;
+}
+
+.wake-lock-btn {
+  bottom: 0.9rem;
+  left: 1rem;
+}
+
+.interval-status-btn {
+  top: 0.7rem;
+  left: 50%;
+  font-size: 1rem;
+  font-weight: 500;
+  transform: translateX(-50%);
+}
+
+.interval-status-btn:hover {
+  transform: translateX(-50%) scale(1.1);
+}
+
+.interval-status-btn:active {
+  transform: translateX(-50%) scale(0.95);
+}
+
+/* ========================================
+ * BUTTON STATE INDICATORS
+ * ======================================== */
+
+/* Audio volume indicator */
+.volume-bar-3 {
+  display: none;
+}
+
+/* Disabled state lines */
+.focus-mode-disabled-line {
+  display: block;
+}
+
+.repeat-disabled-line {
+  display: block;
+}
+
+.wake-lock-disabled-line {
+  display: block;
+}

@@ -1,0 +1,156 @@
+/* ========================================
+ * BASE STYLES AND RESET
+ * ======================================== */
+
+/* Global CSS Variables */
+:root {
+  /* Colors - Primary Palette */
+  --color-primary: #3498db;
+  --color-primary-hover: #2980b9;
+  --color-success: #27ae60;
+  --color-success-hover: #229954;
+  --color-danger: #e74c3c;
+  --color-danger-hover: #c0392b;
+  --color-warning: #f39c12;
+  --color-info: #007bff;
+
+  /* Colors - Neutral Palette */
+  --color-neutral: #95a5a6;
+  --color-neutral-hover: #7f8c8d;
+  --color-text: #2c3e50;
+  --color-text-light: #7f8c8d;
+  --color-text-muted: #666;
+  --color-text-dark: #333;
+
+  /* Colors - Background */
+  --color-bg: #f8f9fa;
+  --color-bg-white: #ffffff;
+  --color-bg-light: #f8f9fa;
+  --color-bg-muted: #e9ecef;
+
+  /* Colors - Border */
+  --color-border: #ddd;
+  --color-border-light: #e9ecef;
+  --color-border-muted: #bdc3c7;
+
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-xxl: 3rem;
+
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 5px;
+  --radius-lg: 6px;
+  --radius-xl: 8px;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.1);
+
+  /* Typography */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.85rem;
+  --font-size-md: 0.9rem;
+  --font-size-lg: 1rem;
+  --font-size-xl: 1.2rem;
+  --font-size-xxl: 3.5rem;
+
+  /* Z-index */
+  --z-elevated: 10;
+  --z-modal: 1000;
+  --z-notification: 10000;
+}
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Base Elements */
+body {
+  height: 100vh;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+  transition: background var(--transition-slow);
+}
+
+button {
+  font-family: inherit;
+}
+
+/* ========================================
+ * BODY STATE MODIFIERS
+ * ======================================== */
+
+/* Focus Mode - Hide UI elements */
+body.focus-mode .controls,
+body.focus-mode .corner-btn,
+body.focus-mode .status-bar,
+body.focus-mode .timer-btn {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s ease;
+}
+
+/* Show UI elements when focus mode is active but user interacted */
+body.focus-mode.show-ui .controls,
+body.focus-mode.show-ui .corner-btn,
+body.focus-mode.show-ui .status-bar,
+body.focus-mode.show-ui .timer-btn {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Prevent body scroll when modal is open */
+body.modal-open {
+  overflow: hidden;
+}
+
+/* ========================================
+ * LAYOUT COMPONENTS
+ * ======================================== */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--space-xl);
+}
+
+.flex-space-between {
+  flex: 1;
+}
+
+/* ========================================
+ * UTILITY CLASSES
+ * ======================================== */
+
+.empty-state {
+  padding: 20px;
+  color: var(--color-text-muted);
+  font-style: italic;
+  text-align: center;
+}
+
+.show {
+  display: block !important;
+}

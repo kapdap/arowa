@@ -1,0 +1,91 @@
+/* ========================================
+ * MODAL COMPONENTS
+ * ======================================== */
+
+/* Modal overlay */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--z-modal);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+}
+
+.modal.show {
+  display: flex !important;
+}
+
+/* ========================================
+ * MODAL CONTENT
+ * ======================================== */
+
+/* Modal content container */
+.modal-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  margin: 5% auto;
+  border-radius: 15px;
+  background-color: var(--color-bg-white);
+  box-shadow: var(--shadow-xl);
+}
+
+/* Modal body */
+.modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-xl);
+  min-height: 0;
+}
+
+/* ========================================
+ * MODAL CLOSE BUTTON
+ * ======================================== */
+
+.close {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  z-index: var(--z-elevated);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: #1a1a1a;
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: bold;
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  user-select: none;
+  transition: all var(--transition-fast);
+  text-align: center;
+}
+
+.close:hover {
+  background: #333;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transform: scale(1.1);
+}
+
+.close:active {
+  box-shadow: var(--shadow-sm);
+  transform: scale(0.95);
+}
+
+.close:focus {
+  box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.3);
+  outline: none;
+}

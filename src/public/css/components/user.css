@@ -1,0 +1,158 @@
+/* ========================================
+ * USER PROFILE COMPONENTS
+ * ======================================== */
+
+/* User profile button */
+.user-profile-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  margin-left: 10px;
+  border: 3px solid var(--color-border-muted);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.user-profile-btn:hover {
+  transform: scale(1.1);
+}
+
+/* User avatar */
+.user-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: var(--color-text-dark);
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* ========================================
+ * CONNECTION STATUS STATES
+ * ======================================== */
+
+/* Connected state */
+.connection-status.connected,
+.user-profile-btn.connected,
+.connected-users-count.connected,
+.user-avatar-large.connected {
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+/* Error and disconnected states */
+.connection-status.error,
+.connection-status.disconnected,
+.user-profile-btn.error,
+.user-profile-btn.disconnected,
+.connected-users-count.error,
+.connected-users-count.disconnected,
+.user-avatar-large.error,
+.user-avatar-large.disconnected {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+/* Connecting state */
+.connection-status.connecting,
+.user-profile-btn.connecting,
+.connected-users-count.connecting,
+.user-avatar-large.connecting {
+  border-color: var(--color-warning);
+  color: var(--color-warning);
+}
+
+/* ========================================
+ * CONNECTED USERS DISPLAY
+ * ======================================== */
+
+.connected-users-count {
+  cursor: pointer;
+  transition: color var(--transition-normal);
+}
+
+.connected-users-count:hover {
+  color: var(--color-info);
+  text-decoration: underline;
+}
+
+/* ========================================
+ * USER PROFILE MODAL
+ * ======================================== */
+
+/* Avatar container */
+.user-avatar-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+/* Large avatar */
+.user-avatar-large {
+  width: 130px;
+  height: 130px;
+  border: 6px solid var(--color-border-muted);
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: var(--shadow-md);
+  object-fit: cover;
+  transition: all var(--transition-normal);
+}
+
+.user-avatar-large:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  transform: scale(1.05);
+}
+
+/* ========================================
+ * FORM COMPONENTS
+ * ======================================== */
+
+/* Form groups */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group:last-of-type {
+  margin-bottom: 0;
+}
+
+/* Form labels */
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--color-text-dark);
+  font-weight: 600;
+}
+
+/* Form inputs */
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  font-size: 14px;
+  transition: border-color var(--transition-normal);
+}
+
+.form-group input:focus {
+  border-color: var(--color-info);
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  outline: none;
+}
+
+/* Form help text */
+.form-group small {
+  display: block;
+  margin-top: 5px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+}

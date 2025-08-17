@@ -1,0 +1,14 @@
+/* ========================================
+ * STATUS BAR COMPONENT
+ * ======================================== */
+
+.status-bar {
+  position: fixed;
+  bottom: var(--space-md);
+  right: var(--space-md);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-neutral);
+  font-size: var(--font-size-xs);
+}

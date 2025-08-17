@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "es2020",
+    "moduleResolution": "bundler", // Supports ESM imports/export; without file extensions
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true
+  },
+  "include": [
+    "*.ts",
+    "scripts/**/*.ts",
+    "src/server/**/*.ts",
+    "src/shared/**/*.ts",
+    "src/types/**/*.ts",
+    "tests/**/*.ts"
+  ]
+}
