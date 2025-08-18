@@ -94,15 +94,15 @@ _TODO: Start a new server instance for Playwright tests to avoid conflicts with 
 
 ## Generative AI
 
-You are welcome to use Generative AI tools to assist with the development of AroWā; however, you are expected to have a complete understanding of all code that you contribute to the project, as well as the tools used to generate it. Please be sure to carefully review, critically analyze, and test AI generated code prior to contributing it.
+You are welcome to use Generative AI tools to assist with the development of AroWā; however, you are expected to have a complete understanding of all code that you contribute to the project, as well as the tools used to generate it.
 
-Keep in mind that code created by Generative AI can often be verbose and may introduce unnecessary complexity, references to non-existent code or libraries ("hallucinations"), and other potential issues. It is your responsibility to thoroughly review, test, and refactor any AI generated code that you contribute to ensure it is fully functional, aligns with project standards, and adheres to all licensing requirements.
+Keep in mind that code created by Generative AI can often be verbose, introduce unnecessary complexity, or reference non-existent code or libraries ("hallucinations"). Other potential issues may arise as well, so it is your responsibility to thoroughly review, test, and refactor any AI-generated code you contribute to ensure it is fully functional, aligns with project standards, and adheres to all licensing requirements.
 
 ## Application Name
 
-AroWā is the combination of two words from the Māori language: "[aro](https://maoridictionary.co.nz/search?keywords=aro)" meaning "to focus" or "pay attention" and "[wā](https://maoridictionary.co.nz/search?keywords=wā)" meaning "time". Literally translated, AroWā means "FocusTime".
+AroWā (ah-r\*-au-waah, with rolling 'r') (IPA: /ˈɑɾɔwɑː/) is the combination of two words from the Māori language: "[aro](https://maoridictionary.co.nz/search?keywords=aro)" meaning "to focus" or "pay attention" and "[wā](https://maoridictionary.co.nz/search?keywords=wā)" meaning "time". AroWā literally translates to "FocusTime".
 
-In official documentation please remember use upper case **W** and the lowercase **ā** character with a macron when referring to the application name (e.g., Aro**Wā**). For details on the macron character, see ['LATIN SMALL LETTER A WITH MACRON'](https://www.compart.com/en/unicode/U+0101) for details.
+In official documentation please use upper case **W** and the lowercase **ā** character with a macron when referring to the application name (e.g., Aro**Wā**). For details on the macron character, see ['LATIN SMALL LETTER A WITH MACRON'](https://www.compart.com/en/unicode/U+0101).
 
 Note: The single word "[arowā](https://www2.nzqa.govt.nz/assets/NCEA/Subject-pages/Earth-and-Space-Science/Subject-page/NZQA-Science-Technology-terms-Maori-to-English.pdf)" in Māori refers to "understood", "comprehended" or "definitive".
 
