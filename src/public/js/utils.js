@@ -95,7 +95,7 @@ function setSessionIdInUrl(sessionId) {
  */
 async function createDefaultSession(sessionId = null) {
   const clientId = generateClientId();
-  const hashedId = await getSHA256(clientId);
+  const hashedId = getSHA256(clientId);
   const avatarUrl = await getGravatarUrl(hashedId);
 
   return {
@@ -210,7 +210,7 @@ async function getGravatarUrl(emailOrUrl, size = 80) {
  * @returns {Promise<string>} The Gravatar image URL.
  */
 async function generateGravatarUrl(email, size = 80) {
-  const hash = await getSHA256(email);
+  const hash = getSHA256(email);
   return `https://www.gravatar.com/avatar/${hash}?s=${size}&d=identicon&r=pg`;
 }
 

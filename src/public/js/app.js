@@ -289,7 +289,7 @@ class TimerApp {
    */
   async setCurrentUser(user) {
     const clientId = Utils.isValidClientId(user?.clientId) ? user.clientId : Utils.generateClientId();
-    const hashedId = await Utils.getSHA256(clientId);
+    const hashedId = Utils.getSHA256(clientId);
     const current = {
       hashedId,
       clientId,

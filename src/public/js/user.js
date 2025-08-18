@@ -69,7 +69,7 @@ class UserManager {
 
     this.$userProfileBtn.title = this.displayName();
     this.$userAvatar.src = await Utils.getGravatarUrl(
-      current.avatarUrl || current.email || (await Utils.getSHA256(current.clientId)),
+      current.avatarUrl || current.email || Utils.getSHA256(current.clientId),
       80
     );
   }
@@ -83,7 +83,7 @@ class UserManager {
     this.$userNameInput.value = current.name;
     this.$userEmailInput.value = current.email;
     this.$avatarLarge.src = await Utils.getGravatarUrl(
-      current.avatarUrl || current.email || (await Utils.getSHA256(current.clientId)),
+      current.avatarUrl || current.email || Utils.getSHA256(current.clientId),
       160
     );
   }
@@ -110,7 +110,7 @@ class UserManager {
 
     current.name = newName;
     current.email = newEmail;
-    current.avatarUrl = await Utils.getGravatarUrl(newEmail || (await Utils.getSHA256(current.clientId)));
+    current.avatarUrl = await Utils.getGravatarUrl(newEmail || Utils.getSHA256(current.clientId));
 
     this.app.setConnectedUser(current);
     this.app.saveCurrentSession();

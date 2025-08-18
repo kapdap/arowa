@@ -142,7 +142,7 @@ class Receiver {
    */
   async _updateUser(data, session) {
     session.user.clientId = data.clientId;
-    session.user.hashedId = await Utils.getSHA256(data.clientId);
+    session.user.hashedId = Utils.getSHA256(data.clientId);
     session.user.avatarUrl = await Utils.getGravatarUrl(session.user.email || session.user.hashedId);
   }
 }
