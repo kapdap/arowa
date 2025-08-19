@@ -303,7 +303,7 @@ class SettingsManager {
   /**
    * Render the settings modal with current session data.
    */
-  async render() {
+  render() {
     this.renderSettings();
     this.renderToggleStates();
   }

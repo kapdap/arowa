@@ -64,11 +64,11 @@ class UserManager {
   /**
    * Update user profile button with name and avatar.
    */
-  async renderButton() {
+  renderButton() {
     const current = this.app.getCurrentUser();
 
     this.$userProfileBtn.title = this.displayName();
-    this.$userAvatar.src = await Utils.getGravatarUrl(
+    this.$userAvatar.src = Utils.getGravatarUrl(
       current.avatarUrl || current.email || Utils.getSHA256(current.clientId),
       80
     );
@@ -77,12 +77,12 @@ class UserManager {
   /**
    * Populate user profile modal with current data.
    */
-  async renderModal() {
+  renderModal() {
     const current = this.app.getCurrentUser();
 
     this.$userNameInput.value = current.name;
     this.$userEmailInput.value = current.email;
-    this.$avatarLarge.src = await Utils.getGravatarUrl(
+    this.$avatarLarge.src = Utils.getGravatarUrl(
       current.avatarUrl || current.email || Utils.getSHA256(current.clientId),
       160
     );
@@ -91,15 +91,15 @@ class UserManager {
   /**
    * Update all user interface elements with current data.
    */
-  async render() {
-    await this.renderButton();
-    await this.renderModal();
+  render() {
+    this.renderButton();
+    this.renderModal();
   }
 
   /**
    * Persist user profile changes and update avatar.
    */
-  async save() {
+  save() {
     const session = this.app.getCurrentSession();
     const current = this.app.getCurrentUser();
 
@@ -110,20 +110,20 @@ class UserManager {
 
     current.name = newName;
     current.email = newEmail;
-    current.avatarUrl = await Utils.getGravatarUrl(newEmail || Utils.getSHA256(current.clientId));
+    current.avatarUrl = Utils.getGravatarUrl(newEmail || Utils.getSHA256(current.clientId));
 
     this.app.setConnectedUser(current);
     this.app.saveCurrentSession();
     this.app.socket.userUpdate(session);
 
-    await this.render();
+    this.render();
   }
 
   /**
    * Display user profile editing modal.
    */
-  async show() {
-    await this.renderModal();
+  show() {
+    this.renderModal();
     DOM.showModal('user-modal');
   }
 }

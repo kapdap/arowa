@@ -65,7 +65,7 @@ class Receiver {
       const session =
         this.app.getCurrentSessionId() === data.sessionId
           ? this.app.getCurrentSession()
-          : await Storage.loadSession(data.sessionId);
+          : Storage.loadSession(data.sessionId);
 
       await handler(data, session);
 
@@ -80,9 +80,9 @@ class Receiver {
    * @param {Object} data - Session creation data containing sessionId and clientId.
    * @param {Object} session - Session object to update.
    */
-  async _sessionCreated(data, session) {
+  _sessionCreated(data, session) {
     session.sessionId = data.sessionId;
-    await this._updateUser(data, session);
+    this._updateUser(data, session);
   }
 
   /**
@@ -90,10 +90,10 @@ class Receiver {
    * @param {Object} data - Session join data containing sessionId, session object, and clientId.
    * @param {Object} session - Session object to update.
    */
-  async _sessionJoined(data, session) {
+  _sessionJoined(data, session) {
     Object.assign(session, data.session);
     if (session.user.clientId !== data.clientId) {
-      await this._updateUser(data, session);
+      this._updateUser(data, session);
     }
   }
 
@@ -102,7 +102,7 @@ class Receiver {
    * @param {Object} data - Session update data containing sessionId and session object.
    * @param {Object} session - Session object to update.
    */
-  async _sessionUpdated(data, session) {
+  _sessionUpdated(data, session) {
     Object.assign(session, data.session);
   }
 
@@ -111,7 +111,7 @@ class Receiver {
    * @param {Object} data - Timer update data containing sessionId and timer object.
    * @param {Object} session - Session object to update.
    */
-  async _timerUpdated(data, session) {
+  _timerUpdated(data, session) {
     Object.assign(session.timer, data.timer);
   }
 
@@ -140,10 +140,10 @@ class Receiver {
    * @param {Object} data - User data.
    * @param {Object} session - Session object.
    */
-  async _updateUser(data, session) {
+  _updateUser(data, session) {
     session.user.clientId = data.clientId;
     session.user.hashedId = Utils.getSHA256(data.clientId);
-    session.user.avatarUrl = await Utils.getGravatarUrl(session.user.email || session.user.hashedId);
+    session.user.avatarUrl = Utils.getGravatarUrl(session.user.email || session.user.hashedId);
   }
 }
 

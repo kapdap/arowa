@@ -37,12 +37,12 @@ class ShareManager {
   /**
    * Share session URL via clipboard or modal fallback.
    */
-  async share() {
+  share() {
     const session = this.app.getCurrentSession();
     const url = this.generateUrl(session);
 
     try {
-      await Utils.copyToClipboard(url);
+      Utils.copyToClipboard(url);
       this.showNotification();
     } catch (error) {
       console.warn('Failed to copy to clipboard:', error);
@@ -53,12 +53,12 @@ class ShareManager {
   /**
    * Copy the current session URL to the clipboard.
    */
-  async copy() {
+  copy() {
     const session = this.app.getCurrentSession();
     const url = this.generateUrl(session);
 
     try {
-      await Utils.copyToClipboard(url);
+      Utils.copyToClipboard(url);
       this.showNotification();
     } catch (error) {
       console.warn('Failed to copy to clipboard:', error);

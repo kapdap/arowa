@@ -105,9 +105,9 @@ class SessionManager {
   /**
    * Create a connected user item element for the users popup.
    * @param {Object} user - User object.
-   * @returns {Promise<HTMLElement>} User item element.
+   * @returns {HTMLElement} User item element.
    */
-  async _createUserEl(user) {
+  _createUserEl(user) {
     const status = user.isOnline ? 'online' : 'offline';
 
     const $item = DOM.create('div', { className: 'user-item' });
@@ -115,7 +115,7 @@ class SessionManager {
     const $avatar = DOM.create('div', { className: 'user-item-avatar' });
 
     const $image = DOM.create('img', {
-      src: await Utils.getGravatarUrl(user.avatarUrl || user.clientId, 40),
+      src: Utils.getGravatarUrl(user.avatarUrl || user.clientId, 40),
       alt: user.name || 'User avatar',
       className: `user-status-${status}`,
     });
@@ -210,9 +210,9 @@ class SessionManager {
     });
 
     Events.on($checkbox, 'change', this.renderClearButton.bind(this));
-    Events.on($deleteBtn, 'click', async (e) => {
+    Events.on($deleteBtn, 'click', (e) => {
       e.stopPropagation();
-      await this._remove(sessionId);
+      this._remove(sessionId);
     });
 
     return $sessionItem;
@@ -224,7 +224,7 @@ class SessionManager {
   async _clear() {
     const $checkboxes = DOM.queryAll('.session-checkbox:checked');
     if ($checkboxes.length > 0) {
-      await this._removeSelected();
+      this._removeSelected();
       return;
     }
 
@@ -233,7 +233,7 @@ class SessionManager {
 
     Storage.clearAllSessions();
 
-    await this.app.restart();
+    this.app.restart();
     this.renderSessions();
   }
 
@@ -248,7 +248,7 @@ class SessionManager {
     Storage.deleteSession(sessionId);
 
     if (sessionId === this.app.getCurrentSessionId()) {
-      await this.app.restart();
+      this.app.restart();
     }
 
     this.renderSessions();
@@ -276,7 +276,7 @@ class SessionManager {
     });
 
     if (isCurrent) {
-      await this.app.restart();
+      this.app.restart();
     }
 
     this.renderSessions();
@@ -316,24 +316,24 @@ class SessionManager {
   /**
    * Create a new session with a random ID.
    */
-  async create() {
-    await this.join(Utils.generateSessionId());
+  create() {
+    this.join(Utils.generateSessionId());
   }
 
   /**
    * Connect to session and initialize user state.
    * @param {string} sessionId - Session ID to join.
    */
-  async join(sessionId) {
+  join(sessionId) {
     if (!Utils.isValidSessionId(sessionId)) {
       console.log('Sanitizing invalid session ID:', sessionId);
       sessionId = Utils.generateSessionId(sessionId);
     }
 
-    const session = await Storage.loadSession(sessionId);
+    const session = Storage.loadSession(sessionId);
     const user = session.user?.clientId ? session.user : this.app.getCurrentUser();
 
-    await this.app.setCurrentSession(session);
+    this.app.setCurrentSession(session);
     this.app.setConnectedUser(user);
     this.app.timer.reload(true);
 
@@ -362,7 +362,7 @@ class SessionManager {
   /**
    * Render the list of connected users in the popup.
    */
-  async renderUsers() {
+  renderUsers() {
     this.$usersList.innerHTML = '';
 
     if (this.app.getConnectedUserCount() === 0) {
@@ -371,7 +371,7 @@ class SessionManager {
     }
 
     const users = this.app.getConnectedUsers();
-    const $userItems = await Promise.all(Object.values(users).map((user) => this._createUserEl(user)));
+    const $userItems = Object.values(users).map((user) => this._createUserEl(user));
 
     $userItems.forEach(($item) => this.$usersList.appendChild($item));
   }

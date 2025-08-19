@@ -91,12 +91,12 @@ function setSessionIdInUrl(sessionId) {
 /**
  * Create a default session object structure.
  * @param {string|null} sessionId - Optional session ID to assign.
- * @returns {Promise<Object>} Default session object.
+ * @returns {Object} Default session object.
  */
-async function createDefaultSession(sessionId = null) {
+function createDefaultSession(sessionId = null) {
   const clientId = generateClientId();
   const hashedId = getSHA256(clientId);
-  const avatarUrl = await getGravatarUrl(hashedId);
+  const avatarUrl = getGravatarUrl(hashedId);
 
   return {
     sessionId: isValidSessionId(sessionId) ? sessionId : generateSessionId(),
@@ -183,11 +183,11 @@ body {
 
 /**
  * Generate a Gravatar URL for the given email or URL and image size.
- * @param {string} emailOrUrl - The user's email address or an existing Gravatar URL.
- * @param {number} [size=80] - The desired image size in pixels.
- * @returns {Promise<string>} The Gravatar image URL.
+ * @param {string} emailOrUrl - User's email address or an existing Gravatar URL.
+ * @param {number} [size=80] - Desired image size in pixels.
+ * @returns {string} Gravatar image URL.
  */
-async function getGravatarUrl(emailOrUrl, size = 80) {
+function getGravatarUrl(emailOrUrl, size = 80) {
   if (!emailOrUrl) {
     // If no email, use a random string to generate a unique avatar
     const random = Math.random().toString(36).substring(2, 15);
@@ -205,11 +205,11 @@ async function getGravatarUrl(emailOrUrl, size = 80) {
 
 /**
  * Generate a Gravatar URL for a preprocessed email and image size.
- * @param {string} email - The preprocessed email or identifier to hash for Gravatar.
- * @param {number} [size=80] - The desired image size in pixels.
- * @returns {Promise<string>} The Gravatar image URL.
+ * @param {string} email - Preprocessed email or identifier to hash for Gravatar.
+ * @param {number} [size=80] - Desired image size in pixels.
+ * @returns {string} Gravatar image URL.
  */
-async function generateGravatarUrl(email, size = 80) {
+function generateGravatarUrl(email, size = 80) {
   const hash = getSHA256(email);
   return `https://www.gravatar.com/avatar/${hash}?s=${size}&d=identicon&r=pg`;
 }
@@ -512,14 +512,10 @@ const Storage = {
   /**
    * Load session from storage or create a new one if it doesn't exist.
    * @param {string} sessionId - Session ID.
-   * @returns {Promise<Object>} Session object.
+   * @returns {Object} Session object.
    */
-  async loadSession(sessionId) {
-    let session = this.getSession(sessionId);
-    if (!session) {
-      session = await createDefaultSession(sessionId);
-    }
-    return session;
+  loadSession(sessionId) {
+    return this.getSession(sessionId) ?? createDefaultSession(sessionId);
   },
 
   /**

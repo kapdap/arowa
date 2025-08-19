@@ -256,11 +256,11 @@ class TimerApp {
    * Update current session and initialize user data.
    * @param {Object} session - Session object to set as current.
    */
-  async setCurrentSession(session) {
+  setCurrentSession(session) {
     this.currentSession = session;
     this.currentSessionId = session.sessionId;
     Utils.setSessionIdInUrl(session.sessionId);
-    await this.setCurrentUser(session.user);
+    this.setCurrentUser(session.user);
   }
 
   /**
@@ -287,7 +287,7 @@ class TimerApp {
    * Process and store user data with generated avatar.
    * @param {Object} user - User object containing user data.
    */
-  async setCurrentUser(user) {
+  setCurrentUser(user) {
     const clientId = Utils.isValidClientId(user?.clientId) ? user.clientId : Utils.generateClientId();
     const hashedId = Utils.getSHA256(clientId);
     const current = {
@@ -295,7 +295,7 @@ class TimerApp {
       clientId,
       name: String(user?.name ?? ''),
       email: String(user?.email ?? ''),
-      avatarUrl: await Utils.getGravatarUrl(user?.avatarUrl || user?.email || hashedId),
+      avatarUrl: Utils.getGravatarUrl(user?.avatarUrl || user?.email || hashedId),
     };
     this.currentUser = current;
 
@@ -404,7 +404,7 @@ class TimerApp {
     }
 
     try {
-      await this.setCurrentSession(session);
+      this.setCurrentSession(session);
       await handler(data, session);
       this.saveCurrentSession();
 
@@ -419,7 +419,7 @@ class TimerApp {
    * @param {Object} data - Event data.
    * @param {Object} session - Session object.
    */
-  async _sessionCreated(data, session) {
+  _sessionCreated(data, session) {
     this.clearConnectedUsers();
     this.setConnectedUser(session.user);
     this.setCurrentUser(session.user);
@@ -431,7 +431,7 @@ class TimerApp {
    * @param {Object} data - Event data.
    * @param {Object} session - Session object.
    */
-  async _sessionJoined(data, session) {
+  _sessionJoined(data, session) {
     if (Object.keys(session.users).length > 0) {
       this.setConnectedUsers(session.users);
     } else {
@@ -446,14 +446,14 @@ class TimerApp {
   /**
    * Handle session updated event by updating timer intervals.
    */
-  async _sessionUpdated() {
+  _sessionUpdated() {
     this.timer.updateIntervals();
   }
 
   /**
    * Handle timer updated event by updating timer state.
    */
-  async _timerUpdated() {
+  _timerUpdated() {
     this.timer.update();
   }
 
@@ -492,7 +492,7 @@ class TimerApp {
   /**
    * Restart the application and create a new session.
    */
-  async restart() {
+  restart() {
     console.log('Restarting application...');
     this.socket.disconnect();
 
@@ -501,9 +501,7 @@ class TimerApp {
     this.clearCurrentUser();
 
     this.socket.connect();
-
-    await this.sessions.create();
-
+    this.sessions.create();
     this.timer.reload(true);
 
     console.log('Application restarted');
