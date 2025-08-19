@@ -84,5 +84,5 @@ temp/
 # Docker compose override file
 docker-compose.override.yml
 
-dist/
+/dist/
 tests/ui/results/
