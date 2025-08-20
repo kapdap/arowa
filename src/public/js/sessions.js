@@ -294,10 +294,9 @@ class SessionManager {
 
     if (this.app.socket.isConnected()) {
       handler();
-      return;
     }
 
-    Events.on(document, 'websocketConnected', handler, { once: true });
+    Events.on(document, 'websocketConnected', handler);
   }
 
   /**
