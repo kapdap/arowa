@@ -16,6 +16,12 @@ FROM node:alpine
 
 WORKDIR /app
 
+# Create non-root user
+RUN adduser -D arowa && chown -R arowa:arowa /app
+
+# Switch to non-root user
+USER arowa
+
 # Copy build artifacts
 COPY --from=build /build/dist ./dist
 COPY --from=build /build/package.json .
