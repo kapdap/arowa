@@ -6,7 +6,7 @@ import type { ErrorMessage, Session } from '../types/messages';
 import type { ServerWebSocket } from '../types/server';
 import type { Logger } from 'pino';
 import { createLogger } from './logger.js';
-import { formatSession, formatPongMsg, formatErrorMsg, generateUUID } from './messages.js';
+import { formatSession, formatPongMsg, formatErrorMsg } from './messages.js';
 import SessionManager from './sessions.js';
 import express, { Express, Request, Response, NextFunction } from 'express';
 import http, { Server as HttpServer } from 'http';
@@ -214,7 +214,7 @@ class TimerServer {
     this.logger.info({}, `WebSocket connection established`);
 
     ws.isAlive = true;
-    ws.socketId = generateUUID();
+    ws.socketId = null;
     ws.sessionId = null;
     ws.clientId = null;
 

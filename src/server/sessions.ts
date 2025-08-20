@@ -42,7 +42,6 @@ class SessionManager {
   private logger: Logger;
   private handlers: Map<string, (ws: ServerWebSocket, message: IncomingMessage) => void>;
   private sessions: Map<string, SessionInternal>;
-  private sockets: Map<string, ServerWebSocket>;
   private cleanup: NodeJS.Timeout | null;
 
   /**
@@ -52,7 +51,6 @@ class SessionManager {
     this.logger = createLogger('session-manager');
     this.handlers = new Map();
     this.sessions = new Map();
-    this.sockets = new Map();
     this.cleanup = null;
 
     this.setupHandlers();
@@ -575,7 +573,7 @@ class SessionManager {
   }
 
   /**
-   * Dispose session manager by clearing all sessions, handlers, sockets, and cleanup intervals.
+   * Dispose session manager by clearing all sessions, handlers, and cleanup intervals.
    */
   dispose(): void {
     if (this.cleanup) {
@@ -584,7 +582,6 @@ class SessionManager {
     }
     this.handlers.clear();
     this.sessions.clear();
-    this.sockets.clear();
   }
 }
 
