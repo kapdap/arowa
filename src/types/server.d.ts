@@ -6,6 +6,7 @@ import type SessionManager from './sessions';
 
 export interface ServerWebSocket extends WebSocket {
   isAlive?: boolean;
+  socketId?: string | null;
   sessionId?: string | null;
   clientId?: string | null;
 }

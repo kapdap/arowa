@@ -9,15 +9,9 @@ import type {
   IncomingMessage,
   OutgoingMessage,
   SessionInternal,
-  SessionJoinMessage,
   SessionUpdate,
-  SessionUpdateMessage,
-  SessionUpdatedMessage,
   TimerState,
-  TimerUpdateMessage,
   UserInternal,
-  UserUpdated,
-  UserUpdateMessage,
 } from '../types/messages';
 import {
   formatClientId,
@@ -34,6 +28,7 @@ import {
   formatUserDisconnectedMsg,
   formatUserUpdatedMsg,
   hashString,
+  generateUUID,
 } from './messages.js';
 import { createLogger } from './logger.js';
 
@@ -45,21 +40,23 @@ const SESSION_TIMEOUT = 10 * 60 * 1000;
  */
 class SessionManager {
   private logger: Logger;
-  private sessions: Map<string, SessionInternal>;
   private handlers: Map<string, (ws: ServerWebSocket, message: IncomingMessage) => void>;
+  private sessions: Map<string, SessionInternal>;
+  private sockets: Map<string, ServerWebSocket>;
   private cleanup: NodeJS.Timeout | null;
 
   /**
-   * Initialize session manager, set up message handlers, and start cleanup timer.
+   * Initialize session manager, message handlers, sessions, sockets, and cleanup timer.
    */
   constructor() {
     this.logger = createLogger('session-manager');
-    this.sessions = new Map();
     this.handlers = new Map();
+    this.sessions = new Map();
+    this.sockets = new Map();
     this.cleanup = null;
 
     this.setupHandlers();
-    this.startCleanupTimer();
+    this.startCleanup();
   }
 
   /**
@@ -81,7 +78,7 @@ class SessionManager {
    */
   handleMessage(ws: ServerWebSocket, message: IncomingMessage): void {
     try {
-      const parsed = formatIncoming(message) as IncomingMessage;
+      const parsed = formatIncoming(message);
       const handler = this.handlers.get(parsed.type);
       if (handler) {
         handler(ws, parsed);
@@ -110,61 +107,72 @@ class SessionManager {
    */
   private handleSessionJoin(ws: ServerWebSocket, message: IncomingMessage): void {
     if (message.type !== 'session_join') return;
-    const { sessionId, session: update, timer, user } = message as SessionJoinMessage;
+    const { sessionId, session: update, timer, user } = message;
 
+    const now = Date.now();
+
+    ws.socketId = generateUUID();
     ws.sessionId = sessionId as string;
     ws.clientId = formatClientId(user.clientId) as string;
 
     let session = this.getSession(ws.sessionId);
     const isNew = !session;
 
-    if (!session) session = this.createSession(ws.sessionId, update, timer);
+    if (!session) {
+      session = this.createSession(ws.sessionId, update, timer);
+    }
+
+    const existing = session.users[ws.clientId];
     session.timer = session.timerCore.sync();
 
-    const now = Date.now();
-    const clientId = ws.clientId;
-    const existing = session.users[clientId];
-
     if (existing) {
+      const sockets = existing.sockets;
+      sockets.set(ws.socketId, ws);
+
       Object.assign(
         existing,
         formatInternalUser({
           ...user,
-          clientId: existing.clientId,
           offlineAt: null,
           lastPing: now,
-          ws,
+          sockets,
         })
       );
-      session.users[clientId] = existing;
+
       this.logger.info(
         { clientId: ws.clientId, sessionId: ws.sessionId },
         `Client ${ws.clientId} reconnected to session ${ws.sessionId}`
       );
 
-      const hasOffline = Object.values(session.users).some((u) => !u.ws || u.ws.readyState !== 1);
-      if (!hasOffline && session.emptyAt) {
+      const hasOnline = Object.values(session.users).some((u) =>
+        Array.from(u.sockets.values()).some((socket) => socket.readyState === 1)
+      );
+
+      if (hasOnline && session.emptyAt) {
         session.emptyAt = null;
         this.logger.info({ sessionId }, `Session ${sessionId} no longer marked for cleanup`);
       }
     } else {
-      const hashedId = hashString(clientId);
-      session.users[clientId] = formatInternalUser({
+      const hashedId = hashString(ws.clientId);
+
+      session.users[ws.clientId] = formatInternalUser({
         clientId: hashedId,
         name: user.name,
         avatarUrl: user.avatarUrl,
         isOnline: true,
         offlineAt: null,
         lastPing: now,
-        ws,
+        sockets: new Map([[ws.socketId, ws]]),
       });
+
       this.logger.info(
         { clientId: ws.clientId, sessionId: ws.sessionId },
         `Client ${ws.clientId} joined session ${ws.sessionId}`
       );
     }
 
-    this.setSession(ws.sessionId, session);
+    this.setSession(session.sessionId, session);
+
     this.sendMessage(
       ws,
       isNew
@@ -182,9 +190,10 @@ class SessionManager {
       session,
       formatUserConnectedMsg({
         sessionId: session.sessionId,
-        user: session.users[clientId],
+        user: session.users[ws.clientId],
       }),
-      clientId
+      ws.socketId,
+      ws.clientId
     );
   }
 
@@ -196,9 +205,9 @@ class SessionManager {
    */
   private handleSessionUpdate(ws: ServerWebSocket, message: IncomingMessage): void {
     if (message.type !== 'session_update') return;
-    const { session: update, timer } = message as SessionUpdateMessage;
+    const { session: update, timer } = message;
 
-    const session = this.getClientSession(ws);
+    const session = this.getSocketSession(ws);
     if (!session) return;
 
     if (!Array.isArray(update.intervals?.items)) {
@@ -212,8 +221,9 @@ class SessionManager {
     session.timer = timer ? session.timerCore.updateState(timer) : session.timerCore.sync();
 
     this.setSession(session.sessionId, session);
-    this.broadcastToSession(session, formatSessionUpdatedMsg(session) as SessionUpdatedMessage, ws.clientId);
-    this.broadcastTimerUpdate(session, ws.clientId);
+
+    this.broadcastToSession(session, formatSessionUpdatedMsg(session), ws.socketId);
+    this.broadcastTimerUpdate(session, ws.socketId);
 
     this.logger.debug({ sessionId: ws.sessionId }, `Session ${ws.sessionId} updated by client ${ws.clientId}`);
   }
@@ -226,15 +236,16 @@ class SessionManager {
    */
   private handleTimerUpdate(ws: ServerWebSocket, message: IncomingMessage): void {
     if (message.type !== 'timer_update') return;
-    const { timer } = message as TimerUpdateMessage;
+    const { timer } = message;
 
-    const session = this.getClientSession(ws);
+    const session = this.getSocketSession(ws);
     if (!session) return;
 
     session.timer = session.timerCore.updateState(timer);
 
     this.setSession(session.sessionId, session);
-    this.broadcastTimerUpdate(session, ws.clientId);
+
+    this.broadcastTimerUpdate(session, ws.socketId);
 
     this.logger.debug(
       { clientId: ws.clientId, sessionId: ws.sessionId },
@@ -250,12 +261,12 @@ class SessionManager {
    */
   private handleUserUpdate(ws: ServerWebSocket, message: IncomingMessage): void {
     if (message.type !== 'user_update') return;
-    const { user } = message as UserUpdateMessage;
+    const { user } = message;
 
     const clientId = ws.clientId as string;
     if (!clientId) return;
 
-    const session = this.getClientSession(ws);
+    const session = this.getSocketSession(ws);
     if (!session || !session.users[clientId]) return;
 
     const existing = session.users[clientId];
@@ -266,13 +277,14 @@ class SessionManager {
     session.users[clientId] = existing;
 
     this.setSession(session.sessionId, session);
+
     this.broadcastToSession(
       session,
       formatUserUpdatedMsg({
         sessionId: session.sessionId,
         user: existing,
-      } as UserUpdated),
-      clientId
+      }),
+      ws.socketId
     );
 
     this.logger.debug(
@@ -290,7 +302,7 @@ class SessionManager {
   private handleUserList(ws: ServerWebSocket, message: IncomingMessage): void {
     if (message.type !== 'user_list') return;
 
-    const session = this.getClientSession(ws);
+    const session = this.getSocketSession(ws);
     if (!session) return;
 
     this.sendMessage(ws, formatUsersConnectedMsg(session));
@@ -341,7 +353,6 @@ class SessionManager {
    * @returns session object if found, otherwise null.
    */
   getSession(sessionId: string): SessionInternal | null {
-    if (!sessionId) return null;
     return this.sessions.has(sessionId) ? this.sessions.get(sessionId)! : null;
   }
 
@@ -351,28 +362,26 @@ class SessionManager {
    * @param ws WebSocket connection for client.
    * @returns session object if found, otherwise null.
    */
-  private getClientSession(ws: ServerWebSocket): SessionInternal | null {
-    if (ws.sessionId && this.sessions.has(ws.sessionId)) {
-      const session = this.getSession(ws.sessionId);
-      if (!session) return null;
+  private getSocketSession(ws: ServerWebSocket): SessionInternal | null {
+    const session = this.getSession(ws.sessionId as string);
 
-      session.lastActivity = Date.now();
-      this.setSession(session.sessionId, session);
-
-      return session;
+    if (!session) {
+      this.sendError(ws, 'Session not found');
+      return null;
     }
 
-    this.sendError(ws, 'Session not found');
+    session.lastActivity = Date.now();
+    this.setSession(session.sessionId, session);
 
-    return null;
+    return session;
   }
 
   /**
    * Start periodic cleanup timer for inactive sessions and offline users.
    */
-  private startCleanupTimer(): void {
+  private startCleanup(): void {
     this.cleanup = setInterval(() => {
-      this.cleanupInactiveSessions();
+      this.cleanupSessions();
       this.cleanupOfflineUsers();
     }, CLEANUP_INTERVAL);
   }
@@ -380,12 +389,14 @@ class SessionManager {
   /**
    * Clean up sessions that have been inactive for configured timeout period.
    */
-  private cleanupInactiveSessions(): void {
+  private cleanupSessions(): void {
     const now = Date.now();
     let count = 0;
 
     this.sessions.forEach((session, sessionId) => {
-      const online = Object.values(session.users).filter((u) => u.ws?.readyState === 1).length;
+      const online = Object.values(session.users).filter((u) =>
+        Array.from(u.sockets.values()).some((ws) => ws.readyState === 1)
+      ).length;
 
       if (online === 0 && session.emptyAt && now - session.emptyAt > SESSION_TIMEOUT) {
         this.sessions.delete(sessionId);
@@ -404,7 +415,7 @@ class SessionManager {
 
     this.sessions.forEach((session: SessionInternal) => {
       Object.values(session.users).forEach((user: UserInternal) => {
-        const isOnline = user.ws?.readyState === 1;
+        const isOnline = Array.from(user.sockets.values()).some((ws) => ws.readyState === 1);
         if (!isOnline && !user.offlineAt) {
           user.offlineAt = now;
         } else if (isOnline && user.offlineAt) {
@@ -445,7 +456,9 @@ class SessionManager {
           formatUserDisconnectedMsg({
             sessionId,
             user,
-          })
+          }),
+          null,
+          clientId
         );
       });
 
@@ -459,37 +472,45 @@ class SessionManager {
   /**
    * Mark client as offline in session and schedule removal after timeout if not reconnected.
    *
-   * @param sessionId session ID from which to remove client.
-   * @param clientId client ID to mark as offline.
+   * @param ws WebSocket connection for client to remove.
    */
-  removeClient(sessionId: string, clientId: string): void {
-    const session = this.getSession(sessionId);
+  removeClient(ws: ServerWebSocket): void {
+    if (!ws.socketId || !ws.sessionId || !ws.clientId) return;
+
+    const session = this.getSession(ws.sessionId);
     if (!session) return;
 
-    const user = session.users[clientId];
-    if (user) {
-      user.offlineAt = Date.now();
-      user.ws = null;
+    const user = session.users[ws.clientId];
+    if (!user) return;
 
-      this.broadcastToSession(
-        session,
-        formatUserUpdatedMsg({
-          sessionId,
-          user,
-        }),
-        clientId
-      );
+    user.sockets.delete(ws.socketId);
 
-      this.logger.info({ clientId, sessionId }, `Client ${clientId} disconnected from session ${sessionId}`);
+    if (user.sockets.size > 0) return;
 
-      const hasOnline = Object.values(session.users).some((u) => u.ws?.readyState === 1);
-      if (!hasOnline && !session.emptyAt) {
-        session.emptyAt = Date.now();
-        this.logger.info({ sessionId }, `Session ${sessionId} marked for cleanup`);
-      }
+    user.offlineAt = Date.now();
 
-      session.users[clientId] = user;
-      this.setSession(sessionId, session);
+    this.broadcastToSession(
+      session,
+      formatUserUpdatedMsg({
+        sessionId: session.sessionId,
+        user,
+      }),
+      ws.socketId,
+      ws.clientId
+    );
+
+    this.logger.info(
+      { clientId: ws.clientId, sessionId: ws.sessionId },
+      `Client ${ws.clientId} disconnected from session ${ws.sessionId}`
+    );
+
+    const hasOnline = Object.values(session.users).some((u) =>
+      Array.from(u.sockets.values()).some((ws) => ws.readyState === 1)
+    );
+
+    if (!hasOnline && !session.emptyAt) {
+      session.emptyAt = Date.now();
+      this.logger.info({ sessionId: ws.sessionId }, `Session ${ws.sessionId} marked for cleanup`);
     }
   }
 
@@ -514,12 +535,15 @@ class SessionManager {
   private broadcastToSession(
     session: SessionInternal,
     message: OutgoingMessage,
-    exclude: string | null | undefined = null
+    exclude: string | null | undefined = null,
+    ignore: string | null | undefined = null
   ): void {
     Object.entries(session.users).forEach(([clientId, user]) => {
-      if (clientId !== exclude && user.ws?.readyState === 1) {
-        this.sendMessage(user.ws, message);
-      }
+      if (ignore && ignore === clientId) return;
+      user.sockets.forEach((ws) => {
+        if (exclude && exclude === ws.socketId) return;
+        this.sendMessage(ws, message);
+      });
     });
   }
 
@@ -551,15 +575,16 @@ class SessionManager {
   }
 
   /**
-   * Dispose session manager by clearing all sessions, handlers, and cleanup intervals.
+   * Dispose session manager by clearing all sessions, handlers, sockets, and cleanup intervals.
    */
   dispose(): void {
     if (this.cleanup) {
       clearInterval(this.cleanup);
       this.cleanup = null;
     }
-    this.sessions.clear();
     this.handlers.clear();
+    this.sessions.clear();
+    this.sockets.clear();
   }
 }
 

@@ -453,7 +453,7 @@ export function formatInternalUser(input: User | UserInternal): UserInternal {
     // Internal connection state, these properties do not exist in User type
     lastPing: user?.lastPing || Date.now(),
     offlineAt: user?.offlineAt || 0,
-    ws: user?.ws || null,
+    sockets: user?.sockets || new Map(),
   };
 }
 

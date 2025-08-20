@@ -11,7 +11,7 @@ export interface User {
 export interface UserInternal extends User {
   lastPing?: number;
   offlineAt?: number | null;
-  ws?: ServerWebSocket | null;
+  sockets: Map<string, ServerWebSocket>;
 }
 
 export interface UserUpdated {
